@@ -9,11 +9,10 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.batch.BasicBatchConfigurer;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 public class JobParameterAsyncTest implements ApplicationRunner {
     private final BasicBatchConfigurer basicBatchConfigurer;
