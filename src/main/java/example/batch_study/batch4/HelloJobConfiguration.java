@@ -12,10 +12,9 @@ import org.springframework.batch.core.step.job.DefaultJobParametersExtractor;
 import org.springframework.batch.core.step.job.JobParametersExtractor;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @RequiredArgsConstructor
-@Configuration
+//@Configuration
 @Slf4j
 public class HelloJobConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
