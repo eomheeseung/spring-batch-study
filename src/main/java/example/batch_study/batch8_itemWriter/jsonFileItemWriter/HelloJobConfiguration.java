@@ -1,4 +1,4 @@
-package example.batch_study.batch7_itemReader.JpaCursorItemReader;
+package example.batch_study.batch8_itemWriter.jsonFileItemWriter;
 
 import example.batch_study.customer.Customer;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +10,15 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.item.json.JacksonJsonObjectMarshaller;
+import org.springframework.batch.item.json.builder.JsonFileItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.FileSystemResource;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 //@Configuration
@@ -44,24 +48,26 @@ public class HelloJobConfiguration {
 
     @Bean
     public ItemReader<Customer> customItemReader() {
-        HashMap<String, Object> parameters = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         parameters.put("age", 25);
 
-        return new JpaCursorItemReaderBuilder<Customer>()
-                .name("jpaCursorItemReader")
+        return new JpaPagingItemReaderBuilder<Customer>()
+                .name("jpaPagingItemReader")
                 .entityManagerFactory(entityManagerFactory)
-                .queryString("select c from Customer c where age >= :age")
+                .pageSize(10)
+                .queryString("select c from Customer c where c.age >= :age order by c.id")
                 .parameterValues(parameters)
                 .build();
     }
 
     @Bean
     public ItemWriter<Customer> customItemWriter() {
-        return items -> {
-            for (Customer item : items) {
-                log.info("item = {}", item.toString());
-//                System.out.println("item = " + item.toString());
-            }
-        };
+        return new JsonFileItemWriterBuilder<Customer>()
+                .name("jsonFileWriter")
+                .jsonObjectMarshaller(new JacksonJsonObjectMarshaller<>())
+                .resource(
+                        new FileSystemResource("/Users/eomhuiseung/Downloads/batch_study/src/main/java/example/batch_study/batch8_itemWriter/jsonFileItemWriter/save_customer.json"))
+                .build();
     }
+
 }

@@ -11,7 +11,6 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.adapter.ItemReaderAdapter;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 //@Configuration
@@ -55,4 +54,14 @@ public class HelloJobConfiguration {
             }
         };
     }
+
+    @Bean
+    public CustomService customerService() {
+        return new CustomService();
+    }
+
+    class CustomService {
+
+    }
+
 }

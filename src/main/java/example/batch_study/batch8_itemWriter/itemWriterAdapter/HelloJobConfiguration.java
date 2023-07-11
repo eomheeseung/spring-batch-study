@@ -1,4 +1,4 @@
-package example.batch_study.batch7_itemReader.JpaCursorItemReader;
+package example.batch_study.batch8_itemWriter.itemWriterAdapter;
 
 import example.batch_study.customer.Customer;
 import lombok.RequiredArgsConstructor;
@@ -10,20 +10,25 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
+import org.springframework.batch.item.adapter.ItemWriterAdapter;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 
 import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.Map;
 
-@Slf4j
 //@Configuration
+@Slf4j
 @RequiredArgsConstructor
 public class HelloJobConfiguration {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final EntityManagerFactory entityManagerFactory;
+    private final DataSource dataSource;
     private int chunkSize = 10;
+
 
     @Bean
     public Job helloJob() {
@@ -44,24 +49,36 @@ public class HelloJobConfiguration {
 
     @Bean
     public ItemReader<Customer> customItemReader() {
-        HashMap<String, Object> parameters = new HashMap<>();
+        Map<String, Object> parameters = new HashMap<>();
         parameters.put("age", 25);
 
-        return new JpaCursorItemReaderBuilder<Customer>()
-                .name("jpaCursorItemReader")
+        return new JpaPagingItemReaderBuilder<Customer>()
+                .name("jpaPagingItemReader")
                 .entityManagerFactory(entityManagerFactory)
-                .queryString("select c from Customer c where age >= :age")
+                .pageSize(10)
+                .queryString("select c from Customer c where age >= :age order by c.id")
                 .parameterValues(parameters)
                 .build();
     }
 
     @Bean
     public ItemWriter<Customer> customItemWriter() {
-        return items -> {
-            for (Customer item : items) {
-                log.info("item = {}", item.toString());
-//                System.out.println("item = " + item.toString());
-            }
-        };
+        ItemWriterAdapter<Customer> writer = new ItemWriterAdapter<>();
+        writer.setTargetObject(customService()); // 대상 클래스
+        writer.setTargetMethod("customWrite"); // 대상 메소드
+        return writer;
     }
+
+    @Bean
+    public CustomService customService() {
+        return new CustomService();
+    }
+
+    class CustomService<T> {
+        public void customWrite(T item) {
+            System.out.println("item = " + item);
+        }
+    }
+
+
 }

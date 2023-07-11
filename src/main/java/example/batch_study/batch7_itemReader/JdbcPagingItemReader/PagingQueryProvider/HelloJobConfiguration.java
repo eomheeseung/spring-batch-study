@@ -1,6 +1,6 @@
 package example.batch_study.batch7_itemReader.JdbcPagingItemReader.PagingQueryProvider;
 
-import example.batch_study.batch7_itemReader.customer.Customer;
+import example.batch_study.customer.Customer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -15,7 +15,6 @@ import org.springframework.batch.item.database.PagingQueryProvider;
 import org.springframework.batch.item.database.builder.JdbcPagingItemReaderBuilder;
 import org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import javax.sql.DataSource;
@@ -23,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@Configuration
+//@Configuration
 @RequiredArgsConstructor
 public class HelloJobConfiguration {
     private final JobBuilderFactory jobBuilderFactory;

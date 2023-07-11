@@ -1,4 +1,4 @@
-package example.batch_study.batch7_itemReader.customer;
+package example.batch_study.customer;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,6 +1,6 @@
 package example.batch_study.batch7_itemReader.JdbcPagingItemReader.JpaPagingItemReader;
 
-import example.batch_study.batch7_itemReader.customer.Customer;
+import example.batch_study.customer.Customer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;

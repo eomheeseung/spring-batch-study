@@ -1,4 +1,4 @@
-package example.batch_study.batch7_itemReader.customer;
+package example.batch_study.customer;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,9 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@NoArgsConstructor
 @Data
-public class Customer {
+@NoArgsConstructor
+public class Customer2 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,8 +20,8 @@ public class Customer {
 
     private String name;
 
-    public Customer(int age, String name) {
-        this.age = age;
-        this.name = name;
+    public Customer2(Customer item) {
+        this.name = item.getName();
+        this.age = item.getAge();
     }
 }
